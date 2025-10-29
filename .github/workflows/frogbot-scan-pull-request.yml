@@ -1,5 +1,6 @@
 name: 'Frogbot Scan Pull Request'
 on:
+  workflow_dispatch:
   pull_request_target:
     types: [opened, synchronize]
 permissions:
@@ -15,6 +16,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Start FastCI Optimization
+        uses: jfrog-fastci/fastci@main
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          fastci_otel_token: ${{ secrets.FASTCI_TOKEN }}
 
       # Install prerequisites
       - name: Setup NodeJS
